@@ -1,0 +1,10 @@
+{
+  "heading_style_files": ["docs/rules.md"],
+  "binary_artifact_globs": ["build/previews/*/*.png"],
+  "derived_files": {
+    "docs/rules-summary.md": {
+      "source": "docs/rules.md",
+      "build_cmd": ["python", "tools/build_summary.py"]
+    }
+  }
+}

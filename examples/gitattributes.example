@@ -1,0 +1,31 @@
+# Copy the lines you need into your repo's .gitattributes.
+# Each name must match a driver configured by install.py.
+# With no driver configured, git ignores the attribute and does a normal merge.
+
+# Pure append-only logs that are never edited: git's built-in union is enough.
+**/changelog-raw.md        merge=union
+
+# A markdown table of tools or services, one row per item, keyed by the first cell.
+docs/tools.md              merge=keyedtable
+
+# A newest-first decision log with "- **2026-03-14** - title" entries.
+docs/decisions.md          merge=keyedbullets
+
+# A CSV tracker, one row per item, keyed by the first column.
+data/tracker.csv           merge=keyedcsv
+
+# An allowlist or pin list, one identifier per line.
+config/pinned.txt          merge=keyedslugs
+
+# A task list or rule book where each entry is a "### T-12 - title" block.
+docs/tasks.md              merge=keyedsections
+
+# An index of notes: "- [Title](note.md) - description".
+notes/INDEX.md             merge=keyedpointers
+
+# A JSON file of keyed records. Also list it in .keyed-json.json.
+data/tasks.json            merge=keyedjson
+
+# A generated file: never merge it, rebuild it after the merge instead.
+# (git's built-in "ours" driver needs: git config merge.ours.driver true)
+docs/generated-summary.md  merge=ours

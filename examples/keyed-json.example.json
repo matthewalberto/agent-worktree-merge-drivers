@@ -1,0 +1,15 @@
+{
+  "paths": {
+    "data/tasks.json": {
+      "collections": {"tasks": "id"},
+      "recompute": {"count": "count:tasks", "updated": "max"}
+    },
+    "data/sources.json": {
+      "collections": {"sources": "url"},
+      "sortBy": {"sources": ["url"]}
+    },
+    "data/manifest.json": {
+      "collections": {"records": ""}
+    }
+  }
+}
