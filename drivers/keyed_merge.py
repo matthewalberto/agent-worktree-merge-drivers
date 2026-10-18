@@ -439,7 +439,18 @@ def keyed_merge(base_p, ours_p, theirs_p, cfg):
     merged = {}
     for i in set(base_g) | set(ours_g) | set(theirs_g):
         merged[i] = merge_group(base_g.get(i, []), ours_g.get(i, []), theirs_g.get(i, []), cfg)
-    return rebuild(merged_sk, merged)
+    return terminate_inner_lines(rebuild(merged_sk, merged))
+
+
+def terminate_inner_lines(lines):
+    """Give every line except the last a line ending, in the file's own style.
+
+    A side whose last line had no final newline keeps it unterminated; once rows are
+    appended after it, the next row would be concatenated onto it. The true last line
+    keeps whatever ending it had."""
+    ending = next((line[len(line.rstrip("\r\n")):] for line in lines if line.endswith("\n")), "\n")
+    last = len(lines) - 1
+    return [line if line.endswith("\n") or i == last else line + ending for i, line in enumerate(lines)]
 
 
 def fallback(base_p, ours_p, theirs_p, marker_size, path):

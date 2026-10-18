@@ -215,6 +215,21 @@ def test_csv_field_level_merge_on_same_row():
         repo.cleanup()
 
 
+def test_csv_no_final_newline_keeps_appended_rows_apart():
+    """A file whose last row has no final newline, with a row appended on each side.
+    The appended rows must each get their own line, not be glued onto one."""
+    base = "id,name,status,note\n1,alpha,open,\n2,beta,open,"
+    ours = base + "\n3,gamma,open,"
+    theirs = base + "\n4,delta,open,"
+    repo, rc = scenario("rows.csv", base, ours, theirs, "keyedcsv")
+    try:
+        out = repo.read("rows.csv")
+        assert rc == 0, out
+        assert "3,gamma,open," in out.splitlines() and "4,delta,open," in out.splitlines(), out
+    finally:
+        repo.cleanup()
+
+
 def test_csv_declines_same_column_both_sides():
     ours = "id,name,status,note\n1,alpha,closed,\n2,beta,open,\n"
     theirs = "id,name,status,note\n1,alpha,won,\n2,beta,open,\n"
